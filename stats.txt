@@ -1,0 +1,8 @@
+284 16 0.946666666667
+100% for coding 16% for noncoding
+
+Again we have this 100% treu positive 0 % false negative 92% true negative 8% false positive
+281 19 0.936666666667 :( this ws for 128 128 with 5 epochs
+
+287 13 0.956666666667
+for 128 256 2 epocsh

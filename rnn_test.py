@@ -15,12 +15,18 @@ def prepare_fasta(filename, label):
             seq = ""
         else:
             seq += line.strip()
-    seqs.append(seq)
+    seqs.append((seq,label))
     return seqs
 
 def test():
-    coding = prepare_fasta("TAIR10_pep_20101214.fa", 1)
-    noncoding = prepare_fasta("NONCODEv4_tair.pep.fa", 0)
+    human_noncoding = "Homo_sapiens.GRCh38.ncrna.fa.transdecoder.pep"
+    human_coding = "Homo_sapiens.GRCh38.pep.all.fa"
+    at_coding = "TAIR10_pep_20101214.fa"
+    at_nc = "NONCODEv4_tair.pep.fa"
+    at_nc_mrna = "NONCODEv4_tair.fa"
+    at_cds = "TAIR10_cds_20101214_updated.fa"
+    coding = prepare_fasta(at_coding, 1)
+    noncoding = prepare_fasta(at_nc, 0)
     shuffle(coding)
     shuffle(noncoding)
 
@@ -31,19 +37,18 @@ def test():
     train_labels = [val[1] for val in train]
     
     test_text = [val[0] for val in test]
-    test_labels = [val[0] for val in test]
+    test_labels = [val[1] for val in test]
 
-    tokenizer = Tokenizer(character=True)
+    tokenizer = Tokenizer(min_df=1, character=True)
     train_tokens = tokenizer.fit_transform(train_text)
-
     layers = [
         Embedding(size=128, n_features=tokenizer.n_features),
-        GatedRecurrent(size=128),
+        GatedRecurrent(size=256),
         Dense(size=1, activation='sigmoid')
     ]
 
     model = RNN(layers=layers, cost='BinaryCrossEntropy')
-    model.fit(train_tokens, train_labels)
+    model.fit(train_tokens, train_labels, n_epochs=10)
 
     model.predict(tokenizer.transform(test_text))
     save(model, 'save_test.pkl')

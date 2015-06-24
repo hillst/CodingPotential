@@ -6,3 +6,10 @@ Again we have this 100% treu positive 0 % false negative 92% true negative 8% fa
 
 287 13 0.956666666667
 for 128 256 2 epocsh
+
+FOR HUMAN:
+278 22 0.926666666667
+we actually got some false negatives this time.
+
+For Arabidopsis
+284 16 0.946666666667
